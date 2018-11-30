@@ -29,10 +29,23 @@ function restart() {
   location.reload()
 }
 
+function replay() {
+  removeState()
+  saveState({
+    ...store.getState(),
+    score: 0,
+    game: {
+      ...store.getState().game,
+      guesses: 3
+    }
+  })
+  location.reload()
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App restart={restart}/>
+      <App restart={restart} replay={replay}/>
     </ConnectedRouter>
   </Provider>,
   MOUNT_NODE

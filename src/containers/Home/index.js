@@ -112,7 +112,7 @@ class Home extends React.Component {
             <Form.Field>
               <ButtonBody>
                 <Link to='/Game'><Button primary>Play</Button></Link>
-                <Button secondary onClick={this.props.restart}>Restart</Button>
+                <Button secondary onClick={this.props.restart}>Reset</Button>
               </ButtonBody>
             </Form.Field>
           </Form>

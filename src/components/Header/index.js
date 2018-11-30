@@ -37,16 +37,18 @@ class Header extends React.Component {
         <Link to='/'><HomeButton><h1>Home</h1></HomeButton></Link>
         <TitleHelpBody>
           <div><h1>Who's Who</h1></div>
-          <Popup position='bottom left' trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>} content={<p>Who's who is a game where you guess the artist given a choise of songs</p>}/>
+          <Popup position='bottom left'
+            trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>}
+            content={<p>Who's who is a game where you guess the artist given a choise of songs. But be careful, 3 strikes and you're out. Got what it takes to get the high score?</p>}/>
         </TitleHelpBody>
-        <div><h1>Score: {this.props.score}</h1></div>
+        <div><h1>High Score: {this.props.score}</h1></div>
       </MainHeader>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  score: parseInt(state.score)
+  score: parseInt(state.highscore)
 })
 
 

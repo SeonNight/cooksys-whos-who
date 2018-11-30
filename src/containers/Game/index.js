@@ -4,8 +4,9 @@ import connect from 'react-redux/es/connect/connect'
 import styled, { keyframes } from 'styled-components'
 import { Button, Loader, Dimmer, Segment } from 'semantic-ui-react'
 
-import { loadGameSet } from '../../ducks/game.duck'
+import { loadGameSet, wrongGuess } from '../../ducks/game.duck'
 import { addScore } from '../../ducks/score.duck'
+import { setHighScore } from '../../ducks/highScore.ducks'
 
 import Song from '../../components/Song'
 import Artist from '../../components/Artist'
@@ -101,6 +102,10 @@ const Wrong = styled.div`
   animation-fill-mode: forwards;  
 `
 
+const Score = styled.div`
+  color: green;
+`
+
 class Game extends React.Component {
   constructor(props) {
     super(props)
@@ -130,6 +135,7 @@ class Game extends React.Component {
         this.setState({ correct: true })
       } else {
         this.setState({ correct: false })
+        this.props.wrongGuess()
       }
       this.setState({ next: true, playingMusic: -1 })
     }
@@ -145,47 +151,74 @@ class Game extends React.Component {
   }
 
   render() {
-    return (
-      <MainBody>
-        <GameBody>
-          <h2>CATAGORY: {this.props.selectedGenre}</h2>
-          {this.state.next ? <ResultBody>{this.state.correct ? <Correct>CORRECT</Correct> : <Wrong>WRONG</Wrong>}</ResultBody> : <ResultBody></ResultBody>}
-          <MainContainer>
-            <label>Songs</label>
-            <SongList>
-              {this.props.songs.map((song, index) =>
-                <Song
-                  key={index}
-                  name={song.name}
-                  id={index}
-                  url={song.preview}
-                  playId={this.state.playingMusic}
-                  handleAudioPlay={this.handleAudioPlay} />)}
-            </SongList>
-          </MainContainer>
-          <MainContainer>
-            <label>Artists</label>
-            <Button.Group>
-              {this.props.artists.map((artist, index) =>
-                <Artist
-                  key={index}
-                  correctId={this.props.correct.artistId}
-                  next={this.state.next} name={artist.name}
-                  id={artist.artistId}
-                  onClick={this.handleArtistClick} />)}
-            </Button.Group>
-          </MainContainer>
-          {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : <HelpText>Choose an Artist</HelpText>}
-        </GameBody>
-        <Loader active={this.props.loading} size='massive'>Loading</Loader>
-      </MainBody>
-    )
+    if(this.props.guesses <= 0) {
+      if(this.props.highScore < this.props.score) {
+        this.props.setHighScore(this.props.score)
+
+      }
+      return (
+        <MainBody>
+          <GameBody>
+            <h2>DONE</h2>
+            {this.props.highScore === this.props.score?
+              <ResultBody>
+                <Correct>NEW HIGH SCORE</Correct>
+              </ResultBody>: ''}
+            <ResultBody>
+              <Score>SCORE: {this.props.score}</Score>
+            </ResultBody>
+            <Button primary onClick={this.props.restart}>Restart</Button>
+          </GameBody>
+        </MainBody>
+      )
+    } else {
+      return (
+        <MainBody>
+          <GameBody>
+            <h2>CATAGORY: {this.props.selectedGenre}</h2>
+            <ResultBody>
+              Score: {this.props.score}
+            </ResultBody>
+            {this.state.next ? <ResultBody>{this.state.correct ? <Correct>CORRECT</Correct> : <Wrong>WRONG</Wrong>}</ResultBody> : <ResultBody></ResultBody>}
+            <MainContainer>
+              <label>Songs</label>
+              <SongList>
+                {this.props.songs.map((song, index) =>
+                  <Song
+                    key={index}
+                    name={song.name}
+                    id={index}
+                    url={song.preview}
+                    playId={this.state.playingMusic}
+                    handleAudioPlay={this.handleAudioPlay} />)}
+              </SongList>
+            </MainContainer>
+            <MainContainer>
+              <label>Artists</label>
+              <Button.Group>
+                {this.props.artists.map((artist, index) =>
+                  <Artist
+                    key={index}
+                    correctId={this.props.correct.artistId}
+                    next={this.state.next} name={artist.name}
+                    id={artist.artistId}
+                    onClick={this.handleArtistClick} />)}
+              </Button.Group>
+            </MainContainer>
+            {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : <HelpText>Choose an Artist</HelpText>}
+          </GameBody>
+          <Loader active={this.props.loading} size='massive'>Loading</Loader>
+        </MainBody>
+      )
+    }
   }
 }
 
 Game.propTypes = {
   loadGameSet: PropTypes.func.isRequired,
   addScore: PropTypes.func.isRequired,
+  wrongGuess: PropTypes.func.isRequired,
+  setHighScore: PropTypes.func.isRequired,
   selectedGenre: PropTypes.string,
   numArtists: PropTypes.number,
   numSongs: PropTypes.number,
@@ -194,7 +227,9 @@ Game.propTypes = {
   correct: PropTypes.object,
   score: PropTypes.number,
   errorLoadingGameSet: PropTypes.bool,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  guesses: PropTypes.number,
+  highScore: PropTypes.number
 }
 
 const mapStateToProps = (state) => ({
@@ -206,12 +241,16 @@ const mapStateToProps = (state) => ({
   correct: state.game.correct,
   score: parseInt(state.score),
   errorLoadingGameSet: state.game.errorLoadingGameSet,
-  loading: state.game.loading
+  loading: state.game.loading,
+  guesses: parseInt(state.game.guesses),
+  highScore: parseInt(state.highscore)
 })
 
 const mapDispatchToProps = (dispatch) => ({
   loadGameSet: (genre, numArtists, numSongs) => () => dispatch(loadGameSet(genre, numArtists, numSongs)),
-  addScore: (score) => dispatch(addScore(score))
+  addScore: (score) => dispatch(addScore(score)),
+  wrongGuess: () => dispatch(wrongGuess()),
+  setHighScore: (score) => dispatch(setHighScore(score))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)

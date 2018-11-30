@@ -3,6 +3,7 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 import configReducer from './ducks/config.duck'
 import gameReducer from './ducks/game.duck'
 import scoreReducer from './ducks/score.duck'
+import highscoreReducer from './ducks/highScore.ducks'
 
 import { combineReducers } from 'redux'
 
@@ -27,6 +28,7 @@ export default function createReducer () {
     route: routeReducer,
     config: configReducer,
     game: gameReducer,
-    score: scoreReducer
+    score: scoreReducer,
+    highscore: highscoreReducer
   })
 }
