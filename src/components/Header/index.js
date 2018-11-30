@@ -9,7 +9,7 @@ const MainHeader = styled.header`
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 `
 
@@ -37,7 +37,7 @@ class Header extends React.Component {
         <Link to='/'><HomeButton><h1>Home</h1></HomeButton></Link>
         <TitleHelpBody>
           <div><h1>Who's Who</h1></div>
-          <Popup trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>} content={<p>Who's who is a game where you guess the artist given a choise of songs</p>}/>
+          <Popup position='bottom left' trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>} content={<p>Who's who is a game where you guess the artist given a choise of songs</p>}/>
         </TitleHelpBody>
         <div><h1>Score: {this.props.score}</h1></div>
       </MainHeader>

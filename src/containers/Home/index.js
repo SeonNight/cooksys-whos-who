@@ -43,26 +43,25 @@ const Slider = styled.input`
   transition: opacity .2s;
 
   &:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+    opacity: 1;
   }
 
   /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
   &::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
+    -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #4CAF50; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    background: rgb(22, 88, 230);
+    cursor: pointer;
   }
-
   &::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #4CAF50; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    background: rgb(22, 88, 230);
+    cursor: pointer;
   }
 `
 

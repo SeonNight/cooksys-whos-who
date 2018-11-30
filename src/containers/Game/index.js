@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import connect from 'react-redux/es/connect/connect'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Button, Loader, Dimmer, Segment } from 'semantic-ui-react'
 
 import { loadGameSet } from '../../ducks/game.duck'
@@ -9,6 +9,35 @@ import { addScore } from '../../ducks/score.duck'
 
 import Song from '../../components/Song'
 import Artist from '../../components/Artist'
+
+const correctAnimation = keyframes`
+  0% {
+    transform: rotate(0deg) scale(1.0);
+  }
+  25% {
+    transform: rotate(30deg) scale(2.0);
+  }
+  50% {
+    transform: rotate(0deg) scale(1.0);
+  }
+  75% {
+    transform: rotate(-30deg) scale(2.0);
+  }
+  100% {
+    transform: rotate(0deg) scale(1.0);
+  }
+`
+
+const WrongAnimation = keyframes`
+  from {
+    transform: translate(0px, 0px);
+    color: red;
+  }
+  to {
+    transform: translate(0px, 20px);
+    color: darkred;
+  }
+`
 
 const MainBody = styled.div`
   width: 100%;
@@ -44,6 +73,8 @@ const MainContainer = styled.div`
 `
 
 const SongList = styled.div`
+  width: 100%;
+
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -56,13 +87,18 @@ const HelpText = styled.div`
 
 const ResultBody = styled.div`
   font-weight: bold;
+  font-size: 20pt;
 `
 
 const Correct = styled.div`
   color: green;
+  animation: ${correctAnimation} 2s linear infinite;
 `
+
 const Wrong = styled.div`
   color: red;
+  animation: ${WrongAnimation} 3s linear;
+  animation-fill-mode: forwards;  
 `
 
 class Game extends React.Component {

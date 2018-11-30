@@ -40,7 +40,7 @@ class Song extends React.Component {
   render() {
     return (
       <div>
-        <Button toggle circular color='red' active={this.state.play} onClick={this.handleAudio} icon='play'></Button>
+        <Button size='huge' toggle circular color='red' active={this.state.play} onClick={this.handleAudio} icon='play'></Button>
         <audio ref="audio">
           <source src={this.props.url} type="audio/mpeg" />
           Your browser does not support the audio element.
