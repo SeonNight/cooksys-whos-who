@@ -169,7 +169,6 @@ class Game extends React.Component {
     if(this.props.guesses <= 0 && this.state.next === false) {
       if(this.props.highScore < this.props.score) {
         this.props.setHighScore(this.props.score)
-
       }
       return (
         <MainBody>
@@ -225,6 +224,7 @@ class Game extends React.Component {
             {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : ''}
           </GameBody>
           <Loader active={this.props.loading} size='massive'>Loading</Loader>
+          <Button primary onClick={this.props.restart}>Restart</Button>
         </MainBody>
       )
     }

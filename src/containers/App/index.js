@@ -7,7 +7,7 @@ import Game from '../Game'
 
 const App = (props) => (
   <div>
-    <Route path='/' component={Header} />
+    <Route path='/' component={() => <Header restart={props.replay}/>} />
     <Route exact path='/' component={() => <Home restart={props.restart}/>} />
     <Route exact path='/Game' component={() => <Game restart={props.replay}/>} />
   </div>
