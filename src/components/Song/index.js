@@ -1,5 +1,20 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Button } from 'semantic-ui-react'
+
+const SongBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const SongName = styled.p`
+  max-width: 200px;
+  text-align: center;
+  font-size: 15pt;
+  color: white;
+  margin: auto;
+`
 
 class Song extends React.Component {
   constructor(props) {
@@ -39,13 +54,14 @@ class Song extends React.Component {
 
   render() {
     return (
-      <div>
-        <Button size='huge' toggle circular color='red' active={this.state.play} onClick={this.handleAudio} icon='play'></Button>
+      <SongBody>
+        <Button style={{boxShadow: '2px 2px 10px black'}} size='huge' toggle circular color='red' active={this.state.play} onClick={this.handleAudio} icon='play'></Button>
+        {this.props.next? <SongName>{this.props.name}</SongName> : ''}
         <audio ref="audio">
           <source src={this.props.url} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
-      </div>
+      </SongBody>
     )
   }
 }

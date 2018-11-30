@@ -23,7 +23,17 @@ const FormBody = styled.div`
   margin: 10px;
   padding: 20px;
   
+  border-radius: 15px;
   box-shadow: 10px 10px 10px grey;
+`
+
+const NumberCenter = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  text-weight: bold;
 `
 
 const SliderContainer = styled.div`
@@ -102,12 +112,14 @@ class Home extends React.Component {
               <SliderContainer>
                 <Slider type='range' min='2' max='4' value={this.props.numArtists} onChange={(event) => this.props.selectNumArtists(event.target.value)}/>
               </SliderContainer>
+              <NumberCenter>{this.props.numArtists}</NumberCenter>
             </Form.Field>
             <Form.Field>
               <label>Number of Songs</label>
               <SliderContainer>
                 <Slider type='range' min='1' max='3' value={this.props.numSongs} onChange={(event) => this.props.selectNumSongs(event.target.value)}/>
               </SliderContainer>
+              <NumberCenter>{this.props.numSongs}</NumberCenter>
             </Form.Field>
             <Form.Field>
               <ButtonBody>

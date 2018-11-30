@@ -57,6 +57,7 @@ const GameBody = styled.div`
   padding: 20px;
   color: black;
 
+  border-radius: 15px;
   box-shadow: 10px 10px 10px grey;
 
   display: flex;
@@ -68,6 +69,20 @@ const MainContainer = styled.div`
   width: 100%;
   padding: 10px;
   
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const SongContainer = styled.div`
+  width: 100%;
+  padding: 20px;
+  margin: 20px;
+
+  border-radius: 15px;
+  background-color: rgb(38, 23, 92);
+  box-shadow: inset 2px 2px 20px #000000;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -151,7 +166,7 @@ class Game extends React.Component {
   }
 
   render() {
-    if(this.props.guesses <= 0) {
+    if(this.props.guesses <= 0 && this.state.next === false) {
       if(this.props.highScore < this.props.score) {
         this.props.setHighScore(this.props.score)
 
@@ -176,12 +191,12 @@ class Game extends React.Component {
         <MainBody>
           <GameBody>
             <h2>CATAGORY: {this.props.selectedGenre}</h2>
+            <h3>Lives: {this.props.guesses}</h3>
             <ResultBody>
               Score: {this.props.score}
             </ResultBody>
             {this.state.next ? <ResultBody>{this.state.correct ? <Correct>CORRECT</Correct> : <Wrong>WRONG</Wrong>}</ResultBody> : <ResultBody></ResultBody>}
-            <MainContainer>
-              <label>Songs</label>
+            <SongContainer>
               <SongList>
                 {this.props.songs.map((song, index) =>
                   <Song
@@ -189,23 +204,25 @@ class Game extends React.Component {
                     name={song.name}
                     id={index}
                     url={song.preview}
+                    next={this.state.next}
                     playId={this.state.playingMusic}
                     handleAudioPlay={this.handleAudioPlay} />)}
               </SongList>
-            </MainContainer>
+            </SongContainer>
             <MainContainer>
-              <label>Artists</label>
+              {this.state.next ? '' : <HelpText>Choose an Artist</HelpText>}
               <Button.Group>
                 {this.props.artists.map((artist, index) =>
                   <Artist
                     key={index}
                     correctId={this.props.correct.artistId}
-                    next={this.state.next} name={artist.name}
+                    next={this.state.next}
+                    name={artist.name}
                     id={artist.artistId}
                     onClick={this.handleArtistClick} />)}
               </Button.Group>
             </MainContainer>
-            {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : <HelpText>Choose an Artist</HelpText>}
+            {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : ''}
           </GameBody>
           <Loader active={this.props.loading} size='massive'>Loading</Loader>
         </MainBody>

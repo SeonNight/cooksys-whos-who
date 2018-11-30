@@ -13,6 +13,14 @@ const MainHeader = styled.header`
   align-items: center;
 `
 
+const ItemContainer = styled.div`
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
 const TitleHelpBody = styled.div`
   display: flex;
   flex-direction: row;
@@ -34,14 +42,20 @@ class Header extends React.Component {
   render() {
     return (
       <MainHeader>
-        <Link to='/'><HomeButton><h1>Home</h1></HomeButton></Link>
-        <TitleHelpBody>
-          <div><h1>Who's Who</h1></div>
-          <Popup position='bottom left'
-            trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>}
-            content={<p>Who's who is a game where you guess the artist given a choise of songs. But be careful, 3 strikes and you're out. Got what it takes to get the high score?</p>}/>
-        </TitleHelpBody>
-        <div><h1>High Score: {this.props.score}</h1></div>
+        <ItemContainer>
+          <Link to='/'><HomeButton><h1>Home</h1></HomeButton></Link>
+        </ItemContainer>
+        <ItemContainer>
+          <TitleHelpBody>
+            <div><h1>Who's Who</h1></div>
+            <Popup position='bottom left'
+              trigger={<Icon circular name='help' size='tiny' inverted color='teal'/>}
+              content={<p>Who's who is a game where you guess the artist given a choise of songs. But be careful, 3 strikes and you're out. Got what it takes to get the high score?</p>}/>
+          </TitleHelpBody>
+        </ItemContainer>
+        <ItemContainer>
+          <div><h1>High Score: {this.props.score}</h1></div>
+        </ItemContainer>
       </MainHeader>
     )
   }
