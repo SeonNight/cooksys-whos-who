@@ -7,12 +7,14 @@ export const LOAD_CATEGORIES_UPDATE = 'cooksys/whos-who/Home/LOAD_CATEGORIES_UPD
 export const SELECT_CATEGORY = 'cooksys/whos-who/Home/SELECT_CATEGORY'
 export const SELECT_NUM_ARTISTS = 'cooksys/whos-who/Home/SELECT_NUM_ARTISTS'
 export const SELECT_NUM_SONGS = 'cooksys/whos-who/Home/SELECT_NUM_SONGS'
+export const SELECT_NUM_LIVES = 'cooksys/whos-who/Home/SELECT_NUM_LIVES'
 
 const initialState = {
   categories: [],
   selectedCategory: 'acoustic',
   numArtists: 2,
   numSongs: 1,
+  numLives: 3,
   errorLoadingCategories: false
 }
 
@@ -45,6 +47,11 @@ export default function game (state = initialState, action) {
         ...state,
         numSongs: action.payload
       }
+    case SELECT_NUM_LIVES:
+      return {
+        ...state,
+        numLives: action.payload
+      }
     default:
       return state
   }
@@ -62,6 +69,11 @@ export const selectNumArtists = (num) => ({
 
 export const selectNumSongs = (num) => ({
   type: SELECT_NUM_SONGS,
+  payload: num
+})
+
+export const selectNumLives = (num) => ({
+  type: SELECT_NUM_LIVES,
   payload: num
 })
 

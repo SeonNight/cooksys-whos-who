@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Button, Form } from 'semantic-ui-react'
 
-import { loadGenres, selectCategory, selectNumArtists, selectNumSongs } from '../../ducks/config.duck'
-
+import { loadGenres, selectCategory, selectNumArtists, selectNumSongs, selectNumLives } from '../../ducks/config.duck'
+import { setLives } from '../../ducks/game.duck'
+import { resetScore } from '../../ducks/score.duck'
 
 const HomeBody = styled.div`
   width: 100%;
@@ -102,10 +103,14 @@ class Home extends React.Component {
   randomSongs = () => {
     this.props.selectNumSongs(Math.floor(Math.random() * 3) + 1)
   }
+  randomLives = () => {
+    this.props.selectNumLives(Math.floor(Math.random() * 5) + 1)
+  }
   random = () => {
     this.randomCategory()
     this.randomArtists()
     this.randomSongs()
+    this.randomLives()
   }
 
   render () {
@@ -152,6 +157,16 @@ class Home extends React.Component {
               <NumberCenter>{this.props.numSongs}</NumberCenter>
             </Form.Field>
             <Form.Field>
+              <label>Number of Lives</label>
+              <CatagoryContainer>
+                <SliderContainer>
+                  <Slider type='range' min='1' max='5' value={this.props.numLives} onChange={(event) => this.props.selectNumLives(event.target.value)}/>
+                </SliderContainer>
+                <Button color='teal' onClick={this.randomLives}>Random</Button>
+              </CatagoryContainer>
+              <NumberCenter>{this.props.numLives}</NumberCenter>
+            </Form.Field>
+            <Form.Field>
               <ButtonBody>
                 <Link to='/Game'><Button primary>Play</Button></Link>
                 <Button color='teal' onClick={this.random}>Random</Button>
@@ -170,6 +185,7 @@ Home.propTypes = {
   selectCategory: PropTypes.func.isRequired,
   selectNumArtists: PropTypes.func.isRequired,
   selectNumSongs: PropTypes.func.isRequired,
+  selectNumLives: PropTypes.func.isRequired,
   categories: PropTypes.array,
   numArtists: PropTypes.number,
   numSongs: PropTypes.number
@@ -179,14 +195,16 @@ const mapStateToProps = (state) => ({
   selectedCategory: state.config.selectedCategory,
   categories: state.config.categories,
   numArtists: parseInt(state.config.numArtists),
-  numSongs: parseInt(state.config.numSongs)
+  numSongs: parseInt(state.config.numSongs),
+  numLives: parseInt(state.config.numLives)
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  loadCategories: () => dispatch(loadGenres()),
+  loadCategories: () => {dispatch(loadGenres()); dispatch(resetScore())},
   selectCategory: category => dispatch(selectCategory(category)),
   selectNumArtists: num => dispatch(selectNumArtists(num)),
-  selectNumSongs: num => dispatch(selectNumSongs(num))
+  selectNumSongs: num => dispatch(selectNumSongs(num)),
+  selectNumLives: num => {dispatch(selectNumLives(num)); dispatch(setLives(num))}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

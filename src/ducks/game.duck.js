@@ -7,6 +7,7 @@ export const LOAD_GAME_SET_FAILURE = 'cooksys/whos-who/Game/LOAD_GAME_SET_FAILUR
 export const LOAD_GAME_SET_FAILURE_RESET = 'cooksys/whos-who/Game/LOAD_GAME_SET_FAILURE_RESET'
 export const LOADING = 'cooksys/whos-who/Game/LOADING'
 export const GUESS_WRONG = 'cooksys/whos-who/Game/GUESS_WRONG'
+export const SET_GUESS = 'cooksys/whos-who/Game/SET_GUESS'
 
 const initialState = {
   artists: [],
@@ -19,6 +20,11 @@ const initialState = {
 
 export default function game (state = initialState, action) {
   switch (action.type) {
+    case SET_GUESS:
+      return {
+        ...state,
+        guesses: action.payload
+      }
     case GUESS_WRONG:
       return {
         ...state,
@@ -55,6 +61,12 @@ export default function game (state = initialState, action) {
 export const wrongGuess = () => ({
   type: GUESS_WRONG
 })
+
+export const setLives = (lives) => ({
+  type: SET_GUESS,
+  payload: lives
+})
+
 
 const loadingGame = (set) => ({
   type: LOADING,

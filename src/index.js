@@ -36,7 +36,7 @@ function replay() {
     score: 0,
     game: {
       ...store.getState().game,
-      guesses: 3
+      guesses: store.getState().config.numLives
     }
   })
   location.reload()
