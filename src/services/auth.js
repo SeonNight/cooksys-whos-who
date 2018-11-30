@@ -1,9 +1,10 @@
 import request from '../utils/request'
 
 const TOKEN_KEY = 'whos-who-access-token'
-const AUTH_ENDPOINT = 'http://ec2-18-212-143-11.compute-1.amazonaws.com/api/spotify_access_token'
+//const AUTH_ENDPOINT = 'http://ec2-18-212-143-11.compute-1.amazonaws.com/api/spotify_access_token'
+const AUTH_ENDPOINT = 'http://ec2-54-175-146-123.compute-1.amazonaws.com/api/spotify_access_token'
 
-export function fetchAndStoreAccessToken () {
+export function fetchAndStoreAccessToken() {
   let isFetching = false
 
   // To make authenticated requests to Spotify (and benefit from a higher rate-
@@ -53,7 +54,7 @@ export function fetchAndStoreAccessToken () {
     .catch(err => console.error('Error fetching token from server', err))
 }
 
-export function getAccessTokenFromLocalStorage () {
+export function getAccessTokenFromLocalStorage() {
   // eslint-disable-next-line no-undef
   const accessTokenObject = JSON.parse(localStorage.getItem(TOKEN_KEY))
 
@@ -72,6 +73,6 @@ export function getAccessTokenFromLocalStorage () {
   return null
 }
 
-function isTokenStillValid (token) {
+function isTokenStillValid(token) {
   return Date.now() < token.expiration
 }

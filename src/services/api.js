@@ -5,7 +5,13 @@ import { getAccessTokenFromLocalStorage } from './auth'
 
 const SPOTIFY_ROOT = 'https://api.spotify.com/v1'
 
-export function fetchCategories () {
+export function fetchGenres() {
+  return fetchFromSpotify({
+    endpoint: 'recommendations/available-genre-seeds'
+  })
+}
+
+export function fetchCategories() {
   return fetchFromSpotify({
     endpoint: 'browse/categories',
     params: {
@@ -14,7 +20,7 @@ export function fetchCategories () {
   })
 }
 
-export function fetchFromSpotify ({ endpoint, params }) {
+export function fetchFromSpotify({ endpoint, params }) {
   const spotifyToken = getAccessTokenFromLocalStorage()
   let url = [SPOTIFY_ROOT, endpoint].join('/')
 
@@ -24,5 +30,6 @@ export function fetchFromSpotify ({ endpoint, params }) {
   }
 
   const options = { headers: { 'Authorization': `Bearer ${spotifyToken}` } }
+
   return request(url, options)
 }
