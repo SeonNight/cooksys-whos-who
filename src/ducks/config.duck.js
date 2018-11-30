@@ -16,7 +16,7 @@ const initialState = {
   errorLoadingCategories: false
 }
 
-export default function game(state = initialState, action) {
+export default function game (state = initialState, action) {
   switch (action.type) {
     case LOAD_CATEGORIES_DONE:
       return {

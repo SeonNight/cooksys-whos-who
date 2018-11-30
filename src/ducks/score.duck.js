@@ -3,7 +3,9 @@ export const RESET_SCORE = 'cooksys/whos-who/Game/RESET_SCORE'
 export const ADD_SCORE = 'cooksys/whos-who/Game/ADD_SCORE'
 export const REMOVE_SCORE = 'cooksys/whos-who/Game/REMOVE_SCORE'
 
-export default function score(state = 0, action) {
+const initialState = 0
+
+export default function score (state = initialState, action) {
   switch (action.type) {
     case RESET_SCORE:
       return 0

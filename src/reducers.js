@@ -10,7 +10,7 @@ const routeInitialState = {
   location: null
 }
 
-export function routeReducer(state = routeInitialState, action) {
+export function routeReducer (state = routeInitialState, action) {
   switch (action.type) {
     case LOCATION_CHANGE:
       return {
@@ -22,7 +22,7 @@ export function routeReducer(state = routeInitialState, action) {
   }
 }
 
-export default function createReducer() {
+export default function createReducer () {
   return combineReducers({
     route: routeReducer,
     config: configReducer,

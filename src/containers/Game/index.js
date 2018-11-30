@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import connect from 'react-redux/es/connect/connect'
 import styled from 'styled-components'
+import { Button } from 'semantic-ui-react'
 
 import { loadGameSet } from '../../ducks/game.duck'
 import { addScore } from '../../ducks/score.duck'
@@ -12,18 +13,45 @@ import Artist from '../../components/Artist'
 const MainBody = styled.div`
   width: 100%;
   height: 100%;
-  background-color: lightblue;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
+const GameBody = styled.div`
+  width: 600px;
+  margin: auto;
+  background-color: white;
+  color: black;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const MainContainer = styled.div`
+  width: 100%;
+  padding: 10px;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const SongList = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 class Game extends React.Component {
-  state = {
-    correct: false,
-    next: false,
-    playingMusic: -1
+  constructor(props) {
+    super(props)
+    this.state = {
+      correct: false,
+      next: false,
+      playingMusic: -1
+    }
   }
 
   componentDidMount() {
@@ -52,32 +80,36 @@ class Game extends React.Component {
 
   handleNext = () => {
     this.props.loadGameSet(this.props.selectedGenre, this.props.numArtists, this.props.numSongs)()
-    this.setState({ next: false })
+    this.setState({ next: false, playingMusic: -1  })
   }
 
   handleAudioPlay = (id) => {
-    console.log('handle audio play')
     this.setState({ playingMusic: id })
   }
 
   render() {
     return (
       <MainBody>
-        <h1>GAME</h1>
-        <p>{this.props.selectedGenre}</p>
-        <p>{this.props.score}</p>
-        {this.state.next ? <p>{this.state.correct ? 'CORRECT' : 'WRONG'}</p> : ''}
-        <div>
-          <h2>Artists</h2>
-          {this.props.artists.map((artist, index) =>
-            <Artist key={index} name={artist.name} id={artist.artistId} onClick={this.handleArtistClick} />)}
-        </div>
-        <div>
-          <h2>Songs</h2>
-          {this.props.songs.map((song, index) =>
-            <Song key={index} name={song.name} id={index} url={song.preview} playId={this.state.playingMusic} handleAudioPlay={this.handleAudioPlay} />)}
-        </div>
-        {this.state.next ? <button onClick={this.handleNext}>Next</button> : ''}
+        <GameBody>
+          <h2>CATAGORY:</h2>
+          <p>{this.props.selectedGenre}</p>
+          {this.state.next ? <p>{this.state.correct ? 'CORRECT' : 'WRONG'}</p> : <p></p>}
+          <MainContainer>
+            <label>Songs</label>
+            <SongList>
+              {this.props.songs.map((song, index) =>
+                <Song key={index} name={song.name} id={index} url={song.preview} playId={this.state.playingMusic} handleAudioPlay={this.handleAudioPlay} />)}
+            </SongList>
+          </MainContainer>
+          <MainContainer>
+            <label>Artists</label>
+            <Button.Group>
+              {this.props.artists.map((artist, index) =>
+                <Artist key={index} correctId={this.props.correct.artistId} next={this.state.next} name={artist.name} id={artist.artistId} onClick={this.handleArtistClick} />)}
+            </Button.Group>
+          </MainContainer>
+          {this.state.next ? <Button color='green' onClick={this.handleNext}>Next</Button> : <p>Choose the artist that had sung these songs</p>}
+        </GameBody>
       </MainBody>
     )
   }

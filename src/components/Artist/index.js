@@ -1,11 +1,12 @@
 import React from 'react'
+import { Button } from 'semantic-ui-react'
 
 class Artist extends React.Component {
-  render() {
+  render () {
     return (
-      <button id={this.props.id} onClick={this.props.onClick}>
+      <Button color={this.props.next? ((this.props.id.trim()) === (this.props.correctId.trim())) ? 'green' : 'red' : 'teal'} id={this.props.id} onClick={this.props.onClick}>
         {this.props.name}
-      </button>
+      </Button>
     )
   }
 }

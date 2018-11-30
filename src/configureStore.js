@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import createReducer from './reducers'
 
-export default function configureStore(initialState = {}, history) {
+export default function configureStore (initialState = {}, history) {
   const middlewares = [thunk, routerMiddleware(history)]
 
   const enhancers = [applyMiddleware(...middlewares)]

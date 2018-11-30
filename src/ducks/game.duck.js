@@ -5,16 +5,14 @@ export const LOAD_GAME_SET = 'cooksys/whos-who/Game/LOAD_GAME_SET'
 export const LOAD_GAME_SET_SUCCESS = 'cooksys/whos-who/Game/LOAD_GAME_SET_SUCCESS'
 export const LOAD_GAME_SET_FAILURE = 'cooksys/whos-who/Game/LOAD_GAME_SET_FAILURE'
 
-
 const initialState = {
   artists: [],
   songs: [],
   correct: {},
-  score: 0,
   errorLoadingGameSet: false
 }
 
-export default function game(state = initialState, action) {
+export default function game (state = initialState, action) {
   switch (action.type) {
     case LOAD_GAME_SET_SUCCESS:
       return {
@@ -107,4 +105,4 @@ export const loadGameSet = (genre, numberOfArtists = 4, numberOfSongs = 3) =>
             })
         }
       })
-      .catch(err => dispatch(testFailure(err)))
+      .catch(err => dispatch(loadGameSetFailure(err)))
