@@ -27,6 +27,12 @@ const FormBody = styled.div`
   box-shadow: 10px 10px 10px grey;
 `
 
+const CatagoryContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`
+
 const NumberCenter = styled.div`
   width: 100%;
   display: flex;
@@ -87,6 +93,21 @@ class Home extends React.Component {
     this.props.loadCategories()
   }
 
+  randomCategory = () => {
+    this.props.selectCategory(this.props.categories[Math.floor(Math.random() * this.props.categories.length)])
+  }
+  randomArtists = () => {
+    this.props.selectNumArtists(Math.floor(Math.random() * 3) + 2)
+  }
+  randomSongs = () => {
+    this.props.selectNumSongs(Math.floor(Math.random() * 3) + 1)
+  }
+  random = () => {
+    this.randomCategory()
+    this.randomArtists()
+    this.randomSongs()
+  }
+
   render () {
     const categories = this.props.categories.map(
       category => (
@@ -103,27 +124,37 @@ class Home extends React.Component {
           <Form>
             <Form.Field>
               <label>Choose a Catagory</label>
-              <select value={this.props.selectedCategory} onChange={(event) => this.props.selectCategory(event.target.value)}>
-                {categories}
-              </select>
+              <CatagoryContainer>
+                <Button color='teal' onClick={this.randomCategory}>Random</Button>
+                <select value={this.props.selectedCategory} onChange={(event) => this.props.selectCategory(event.target.value)}>
+                  {categories}
+                </select>
+              </CatagoryContainer>
             </Form.Field>
             <Form.Field>
               <label>Number Of Artists</label>
-              <SliderContainer>
-                <Slider type='range' min='2' max='4' value={this.props.numArtists} onChange={(event) => this.props.selectNumArtists(event.target.value)}/>
-              </SliderContainer>
+              <CatagoryContainer>
+                <SliderContainer>
+                  <Slider type='range' min='2' max='4' value={this.props.numArtists} onChange={(event) => this.props.selectNumArtists(event.target.value)}/>
+                </SliderContainer>
+                <Button color='teal' onClick={this.randomArtists}>Random</Button>
+              </CatagoryContainer>
               <NumberCenter>{this.props.numArtists}</NumberCenter>
             </Form.Field>
             <Form.Field>
               <label>Number of Songs</label>
-              <SliderContainer>
-                <Slider type='range' min='1' max='3' value={this.props.numSongs} onChange={(event) => this.props.selectNumSongs(event.target.value)}/>
-              </SliderContainer>
+              <CatagoryContainer>
+                <SliderContainer>
+                  <Slider type='range' min='1' max='3' value={this.props.numSongs} onChange={(event) => this.props.selectNumSongs(event.target.value)}/>
+                </SliderContainer>
+                <Button color='teal' onClick={this.randomSongs}>Random</Button>
+              </CatagoryContainer>
               <NumberCenter>{this.props.numSongs}</NumberCenter>
             </Form.Field>
             <Form.Field>
               <ButtonBody>
                 <Link to='/Game'><Button primary>Play</Button></Link>
+                <Button color='teal' onClick={this.random}>Random</Button>
                 <Button secondary onClick={this.props.restart}>Reset</Button>
               </ButtonBody>
             </Form.Field>
