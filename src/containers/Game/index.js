@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import connect from 'react-redux/es/connect/connect'
 import styled from 'styled-components'
-import { Button } from 'semantic-ui-react'
+import { Button, Loader, Dimmer, Segment } from 'semantic-ui-react'
 
 import { loadGameSet } from '../../ducks/game.duck'
 import { addScore } from '../../ducks/score.duck'
@@ -20,10 +20,14 @@ const MainBody = styled.div`
 `
 
 const GameBody = styled.div`
-  width: 600px;
+  min-width: 600px;
   margin: auto;
   background-color: white;
+  margin: 10px;
+  padding: 20px;
   color: black;
+
+  box-shadow: 10px 10px 10px grey;
 
   display: flex;
   flex-direction: column;
@@ -42,6 +46,23 @@ const MainContainer = styled.div`
 const SongList = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+`
+
+const HelpText = styled.div`
+  color: grey;
+  font-size: 15pt;
+`
+
+const ResultBody = styled.div`
+  font-weight: bold;
+`
+
+const Correct = styled.div`
+  color: green;
+`
+const Wrong = styled.div`
+  color: red;
 `
 
 class Game extends React.Component {
@@ -58,11 +79,11 @@ class Game extends React.Component {
     this.props.loadGameSet(this.props.selectedGenre, this.props.numArtists, this.props.numSongs)()
   }
 
-  componentWillReceiveProps() {
+  componentDidUpdate() {
     //If failed to load try reloading
     //Or if answered correctly go to next
     if (this.props.errorLoadingGameSet) {
-      this.props.loadGameSet(this.props.selectedGenre, this.props.numArtists, this.props.numSongs)
+      this.props.loadGameSet(this.props.selectedGenre, this.props.numArtists, this.props.numSongs)()
     }
   }
 
@@ -91,25 +112,36 @@ class Game extends React.Component {
     return (
       <MainBody>
         <GameBody>
-          <h2>CATAGORY:</h2>
-          <p>{this.props.selectedGenre}</p>
-          {this.state.next ? <p>{this.state.correct ? 'CORRECT' : 'WRONG'}</p> : <p></p>}
+          <h2>CATAGORY: {this.props.selectedGenre}</h2>
+          {this.state.next ? <ResultBody>{this.state.correct ? <Correct>CORRECT</Correct> : <Wrong>WRONG</Wrong>}</ResultBody> : <ResultBody></ResultBody>}
           <MainContainer>
             <label>Songs</label>
             <SongList>
               {this.props.songs.map((song, index) =>
-                <Song key={index} name={song.name} id={index} url={song.preview} playId={this.state.playingMusic} handleAudioPlay={this.handleAudioPlay} />)}
+                <Song
+                  key={index}
+                  name={song.name}
+                  id={index}
+                  url={song.preview}
+                  playId={this.state.playingMusic}
+                  handleAudioPlay={this.handleAudioPlay} />)}
             </SongList>
           </MainContainer>
           <MainContainer>
             <label>Artists</label>
             <Button.Group>
               {this.props.artists.map((artist, index) =>
-                <Artist key={index} correctId={this.props.correct.artistId} next={this.state.next} name={artist.name} id={artist.artistId} onClick={this.handleArtistClick} />)}
+                <Artist
+                  key={index}
+                  correctId={this.props.correct.artistId}
+                  next={this.state.next} name={artist.name}
+                  id={artist.artistId}
+                  onClick={this.handleArtistClick} />)}
             </Button.Group>
           </MainContainer>
-          {this.state.next ? <Button color='green' onClick={this.handleNext}>Next</Button> : <p>Choose the artist that had sung these songs</p>}
+          {this.state.next ? <Button color='blue' onClick={this.handleNext}>Next</Button> : <HelpText>Choose an Artist</HelpText>}
         </GameBody>
+        <Loader active={this.props.loading} size='massive'>Loading</Loader>
       </MainBody>
     )
   }
@@ -125,7 +157,8 @@ Game.propTypes = {
   songs: PropTypes.array,
   correct: PropTypes.object,
   score: PropTypes.number,
-  errorLoadingGameSet: PropTypes.bool
+  errorLoadingGameSet: PropTypes.bool,
+  loading: PropTypes.bool
 }
 
 const mapStateToProps = (state) => ({
@@ -136,7 +169,8 @@ const mapStateToProps = (state) => ({
   songs: state.game.songs,
   correct: state.game.correct,
   score: parseInt(state.score),
-  errorLoadingGameSet: state.game.errorLoadingGameSet
+  errorLoadingGameSet: state.game.errorLoadingGameSet,
+  loading: state.game.loading
 })
 
 const mapDispatchToProps = (dispatch) => ({

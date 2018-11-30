@@ -14,11 +14,6 @@ import 'semantic-ui-css/semantic.min.css'
 import './index.css'
 
 // Fetch and store the Spotify access token in localStorage
-/*
-Put this back in package.json scripts
-,
-    "precommit": "npm run lint",
-    "prepush": "npm run lint && npm run build" */
 fetchAndStoreAccessToken()
 
 const initialState = loadState()

@@ -4,16 +4,24 @@ export const SELECT_ARTIST = 'cooksys/whos-who/Game/SELECT_ARTIST'
 export const LOAD_GAME_SET = 'cooksys/whos-who/Game/LOAD_GAME_SET'
 export const LOAD_GAME_SET_SUCCESS = 'cooksys/whos-who/Game/LOAD_GAME_SET_SUCCESS'
 export const LOAD_GAME_SET_FAILURE = 'cooksys/whos-who/Game/LOAD_GAME_SET_FAILURE'
+export const LOAD_GAME_SET_FAILURE_RESET = 'cooksys/whos-who/Game/LOAD_GAME_SET_FAILURE_RESET'
+export const LOADING = 'cooksys/whos-who/Game/LOADING'
 
 const initialState = {
   artists: [],
   songs: [],
   correct: {},
-  errorLoadingGameSet: false
+  errorLoadingGameSet: false,
+  loading: false
 }
 
 export default function game (state = initialState, action) {
   switch (action.type) {
+    case LOADING:
+      return {
+        ...state,
+        loading: action.payload
+      }
     case LOAD_GAME_SET_SUCCESS:
       return {
         ...state,
@@ -27,10 +35,20 @@ export default function game (state = initialState, action) {
         ...state,
         errorLoadingGameSet: true
       }
+    case LOAD_GAME_SET_FAILURE_RESET:
+      return {
+        ...state,
+        errorLoadingGameSet: false
+      }
     default:
       return state
   }
 }
+
+const loadingGame = (set) => ({
+  type: LOADING,
+  payload: set
+})
 
 const loadGameSetSuccess = (data) => ({
   type: LOAD_GAME_SET_SUCCESS,
@@ -40,6 +58,10 @@ const loadGameSetSuccess = (data) => ({
 const loadGameSetFailure = (data) => ({
   type: LOAD_GAME_SET_FAILURE,
   payload: data
+})
+
+const loadGameSetFailureReset = () => ({
+  type: LOAD_GAME_SET_FAILURE_RESET
 })
 
 const getRandomAlbums = (albums, numberOfArtists) => {
@@ -83,8 +105,10 @@ const getArtistsInfo = (selectedArtists) => {
 }
 
 export const loadGameSet = (genre, numberOfArtists = 4, numberOfSongs = 3) =>
-  dispatch =>
-    fetchFromSpotify({ endpoint: 'recommendations', params: { seed_genres: genre, limit: 20 } })
+  dispatch => {
+    dispatch(loadGameSetFailureReset())
+    dispatch(loadingGame(true))
+    return fetchFromSpotify({ endpoint: 'recommendations', params: { seed_genres: genre, limit: 20 } })
       .then(data => data.tracks)
       .then(albums => getRandomAlbums(albums, numberOfArtists))
       .then(selectedArtists => {
@@ -101,8 +125,10 @@ export const loadGameSet = (genre, numberOfArtists = 4, numberOfSongs = 3) =>
                 dispatch(loadGameSetFailure(selectedSongs))
               } else {
                 dispatch(loadGameSetSuccess({ artists: selectedArtists, songs: selectedSongs, correct: correctArtist }))
+                dispatch(loadingGame(false))
               }
             })
         }
       })
       .catch(err => dispatch(loadGameSetFailure(err)))
+    }

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Button, Form } from 'semantic-ui-react'
 
-import { removeState } from '../../utils/localStorage'
 import { loadGenres, selectCategory, selectNumArtists, selectNumSongs } from '../../ducks/config.duck'
 
 
@@ -19,7 +18,7 @@ const HomeBody = styled.div`
 `
 
 const FormBody = styled.div`
-  max-width: 300px;
+  width: 300px;
   background-color: white;
   margin: 10px;
   padding: 20px;
@@ -67,6 +66,13 @@ const Slider = styled.input`
   }
 `
 
+const ButtonBody = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
 class Home extends React.Component {
   componentDidMount () {
     this.props.loadCategories()
@@ -81,13 +87,13 @@ class Home extends React.Component {
         </option>
         )
     )
-//<Form loading>
+
     return (
       <HomeBody>
         <FormBody>
           <Form>
             <Form.Field>
-              <label>Categories</label>
+              <label>Choose a Catagory</label>
               <select value={this.props.selectedCategory} onChange={(event) => this.props.selectCategory(event.target.value)}>
                 {categories}
               </select>
@@ -105,8 +111,10 @@ class Home extends React.Component {
               </SliderContainer>
             </Form.Field>
             <Form.Field>
-              <Link to='/Game'><Button primary>Play</Button></Link>
-              <Button secondary onClick={this.props.restart}>Restart</Button>
+              <ButtonBody>
+                <Link to='/Game'><Button primary>Play</Button></Link>
+                <Button secondary onClick={this.props.restart}>Restart</Button>
+              </ButtonBody>
             </Form.Field>
           </Form>
         </FormBody>
